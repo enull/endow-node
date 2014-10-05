@@ -4,9 +4,12 @@ var debug = require('debug')('app:start'),
   express = require('express'),
   favicon = require('static-favicon'),
   bodyParser = require('body-parser'),
-  cookieParser = require('cookie-parser');
+  cookieParser = require('cookie-parser'),
+  passport = require("passport"),
+  passportLocal = require("passport-local");
 
 var routes = require('./routes'),
+  security = require("./lib/security"),
   config = require('./config')();
 
 var app = express();
@@ -46,6 +49,40 @@ app.use(
 );
 
 app.use(express.static(path.join(__dirname, '..', 'public')));
+
+
+//passport config
+passport.use(
+    'local',
+    new passportLocal.Strategy(
+        { passReqToCallback: true },
+        security.authenticate
+    )
+);
+
+//Configure serialization
+passport.serializeUser(function (user, done) {
+    done(null, user.id);
+});
+
+passport.deserializeUser(function (req, id, done) {
+    var user = {
+        id: 1,
+        userName: 'User',
+        password: 'Password',
+        firstName: 'First',
+        lastName: 'Last',
+        email: 'default@null.nul',
+        phone: '000 000 0000',
+        enabled: true
+    };
+    return done(null, user);
+});
+
+//Add passport initialization and session support to the app
+app.use(passport.initialize());
+app.use(passport.session());
+
 //app.use(express.session({ secret: config.session.secret, store: new RedisStore(config.session.store), httpOnly: true }));
 //app.use(express.multipart());
 
