@@ -2,7 +2,7 @@ var debug = require('debug')('app:start'),
   logger = require('morgan'),
   path = require('path'),
   express = require('express'),
-  favicon = require('static-favicon')
+  favicon = require('static-favicon'),
   bodyParser = require('body-parser'),
   cookieParser = require('cookie-parser');
 
@@ -24,6 +24,26 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 //app.use(express.methodOverride());
 app.use(cookieParser(config.cookie.secret));
+
+
+app.use(
+    require('less-middleware')(
+        path.join(__dirname, './less'), {
+            dest: path.join(__dirname, '..', 'public'),
+            debug: true,
+            force: true,
+
+            preprocess: {
+                path: function(pathname, req) {
+                    return pathname.replace('\\styles', '\\');
+                }
+            }
+        }, {
+            compress: true, //make configurable?
+            sourceMap: true
+        }
+    )
+);
 
 app.use(express.static(path.join(__dirname, '..', 'public')));
 //app.use(express.session({ secret: config.session.secret, store: new RedisStore(config.session.store), httpOnly: true }));

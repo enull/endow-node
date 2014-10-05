@@ -24,7 +24,7 @@
 
     "ejs": "~0.8.5",
 
-    "less-middleware": "1.0.x",
+    "less-middleware": "1.0.4",
 
     "when": "^3.5.0"
   },
