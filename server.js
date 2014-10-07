@@ -7,8 +7,8 @@ var
   fs = require('fs'),
   http = require('http'),
 
-  config = require('./config')(),
-  app = require('./app')
+  config = require('./server/config')(),
+  app = require('./server/app')
 ;
 
 
@@ -16,7 +16,6 @@ var start = function(){
   http.createServer(app)
     .listen(config.port, function() {
       console.log('server created... listening on port ' + config.port);
-      //debug('server created... listening on port ' + config.port);
     }
   );
 };

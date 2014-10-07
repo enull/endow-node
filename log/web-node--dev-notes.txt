@@ -1,0 +1,7 @@
+2014-10-05 MC
+Next steps:
+* karma and server test
+* grunt build
+* evaluate restructure to server from start.js at root (and move all from server to root)
+
+
